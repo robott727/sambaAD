@@ -14,7 +14,7 @@ read -p "Office/Room: " -e -i Office office
 ssam=${giveName}.${surName}
 echo "$ssam" > "/root/ldif/ssamout.txt"
 cat /root/ldif/ssamout.txt | perl -CS -MUnicode::Normalize -pne '$_=NFKD($_);s/\p{InDiacriticals}//g' > "/root/ldif/ssamoute.txt"
-ssamout=$(?/root/ldif/ssamoute.txt)
+ssamout=$(</root/ldif/ssamoute.txt)
 
 
 function to_lower()
