@@ -43,7 +43,5 @@ echo "Diaremove: " $ssamout
 echo "Lower: " $usernamelow
 echo "Username: " $username
 
-echo "test: " $gName
-
 
 samba-tool user create $username $password --userou $userou --given-name $giveName --surname $surName --mail-address "$username@pantheon.sk" --physical-delivery-office $office --must-change-at-next-login
