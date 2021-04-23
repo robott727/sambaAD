@@ -14,7 +14,8 @@ read -p "Office/Room: " -e -i Office office
 ssam=${giveName}.${surName}
 echo "$ssam" > "/root/ldif/ssamout.txt"
 cat /root/ldif/ssamout.txt | perl -CS -MUnicode::Normalize -pne '$_=NFKD($_);s/\p{InDiacriticals}//g' > "/root/ldif/ssamoute.txt"
-ssamout=$(</root/ldif/ssamoute.txt)
+iconv -f UTF-8 -t ASCII//TRANSLIT "/root/ldif/ssamoute.txt" > "/root/ldif/ssamoutea.txt"
+ssamout=$(</root/ldif/ssamoutea.txt)
 
 
 function to_lower()
@@ -30,6 +31,12 @@ usernamelow=$(to_lower ${ssamout})
 username=${usernamelow}
 
 
+### gName
+
+#cho "$giveName" > "/root/ldif/givename.txt"
+#conv -f UTF-8 -t UTF-8//TRANSLIT "/root/ldif/givename.txt" > "/root/ldif/givenamea.txt"
+#Name=$(</root/ldif/givenamea.txt)
+
 echo
 echo " Vypluje natukane sracky"
 echo
@@ -42,6 +49,7 @@ echo "Diaremove: " $ssamout
 echo "Lower: " $usernamelow
 echo "Username: " $username
 
-#
+echo "test: " $gName
+
 
 samba-tool user create $username $password --userou $userou --given-name $giveName --surname $surName --mail-address "$username@pantheon.sk" --physical-delivery-office $office --must-change-at-next-login
