@@ -1,22 +1,22 @@
+export LC_ALL=sk_SK.UTF-8
 echo
 echo "Add User"
 echo
 userou="OU=Users,OU=THISS"
 
 
-read -p "Meno: " -e -i Meno giveName
-read -p "Priezvisko: " -e -i Priezvisko surName
+read -p "Meno: " -e -i Róbinko giveName
+read -p "Priezvisko: " -e -i Šermovač surName
 read -p "Heslo: " -e -i P4ssw0rd password
 read -p "Office/Room: " -e -i Office office
-
 
 
 ssam=${giveName}.${surName}
 echo "$ssam" > "/root/ldif/ssamout.txt"
 cat /root/ldif/ssamout.txt | perl -CS -MUnicode::Normalize -pne '$_=NFKD($_);s/\p{InDiacriticals}//g' > "/root/ldif/ssamoute.txt"
-iconv -f UTF-8 -t ASCII//TRANSLIT "/root/ldif/ssamoute.txt" > "/root/ldif/ssamoutea.txt"
-ssamout=$(</root/ldif/ssamoutea.txt)
+ssamout=$(</root/ldif/ssamoute.txt)
 
+echo $ssam
 
 function to_lower()
 {
@@ -28,14 +28,8 @@ function to_lower()
 
 usernamelow=$(to_lower ${ssamout})
 
-username=${usernamelow}
+username=$usernamelow
 
-
-### gName
-
-#cho "$giveName" > "/root/ldif/givename.txt"
-#conv -f UTF-8 -t UTF-8//TRANSLIT "/root/ldif/givename.txt" > "/root/ldif/givenamea.txt"
-#Name=$(</root/ldif/givenamea.txt)
 
 echo
 echo " Vypluje natukane sracky"
