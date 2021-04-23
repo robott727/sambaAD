@@ -1,0 +1,47 @@
+echo
+echo "Add User"
+echo
+userou="OU=Users,OU=THISS"
+
+
+read -p "Meno: " -e -i Meno giveName
+read -p "Priezvisko: " -e -i Priezvisko surName
+read -p "Heslo: " -e -i P4ssw0rd password
+read -p "Office/Room: " -e -i Office office
+
+
+
+ssam=${giveName}.${surName}
+echo "$ssam" > "/root/ldif/ssamout.txt"
+cat /root/ldif/ssamout.txt | perl -CS -MUnicode::Normalize -pne '$_=NFKD($_);s/\p{InDiacriticals}//g' > "/root/ldif/ssamoute.txt"
+ssamout=$(?/root/ldif/ssamoute.txt)
+
+
+function to_lower()
+{
+    local str="$@"
+    local output
+    output=$(tr '[A-Z]' '[a-z]'<<<"${str}")
+    echo $output
+}
+
+usernamelow=$(to_lower ${ssamout})
+
+username=${usernamelow}
+
+
+echo
+echo " Vypluje natukane sracky"
+echo
+
+echo "Meno: " $giveName
+echo "Priezvisko: " $surName
+echo "Heslo: " $password
+echo "Office: " $office
+echo "Diaremove: " $ssamout
+echo "Lower: " $usernamelow
+echo "Username: " $username
+
+#
+
+samba-tool user create $username $password --userou $userou --given-name $giveName --surname $surName --mail-address "$username@pantheon.sk" --physical-delivery-office $office --must-change-at-next-login
